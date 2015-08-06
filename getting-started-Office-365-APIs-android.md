@@ -2,7 +2,7 @@
 
 Let's create a simple application that gets information from an Exchange Online server.
 
-![A screenshot of the app running in an emulator window. The available actions are shown on buttons.](images\O365APIs_RunningApp1-50Percent.png)
+![A screenshot of the app running in an emulator window. The available actions are shown on buttons.](images/O365APIs_RunningApp1-50Percent.png)
 
 ##Create your app and add dependencies
 In this step, you'll create an app and add the Office 365 SDK for Android and Azure Active Directory Authentication Library for Android to the project. Source for both of these libraries is available from GitHub, and you can download the binaries for the Office 365 SDK from [Bintray](https://bintray.com/msopentech/Maven/Office-365-SDK-for-Android/view "Bintray"), if you prefer.
@@ -72,7 +72,6 @@ You'll need to add two permissions to your **AndroidManifest.xml** file so that 
 ```
 
 ###Integrate Office 365 services
-
 <a name="bk_register"></a>
 If you already signed in and registered your app, you're all set, just follow the steps below.
 
@@ -554,20 +553,20 @@ The last piece that you'll need is a user interface that exercises the Azure AD 
 
 Run the application from within your IDE to see the code in action. When you start the application, you'll see three buttons. When you click each of the buttons, information will be sent to the log window of your IDE.
 
-![A screenshot of the app running in an emulator window. The available actions are shown on buttons.](images\O365APIs_RunningApp1-50Percent.png)
+![A screenshot of the app running in an emulator window. The available actions are shown on buttons.](images/O365APIs_RunningApp1-50Percent.png)
 
 When you click the **Authenticate to Office 365** button, the app will call the **AuthenticationController** object which in turn will call the authentication workflow provided by the Azure Active Directory Authentication Library for Android. If a valid token is not available, a form to log in to Office 365 is shown.
 
-![A screenshot of the Office 365 login page.](images\O365APIs_RunningApp2-50Percent.png)
+![A screenshot of the Office 365 login page.](images/O365APIs_RunningApp2-50Percent.png)
 
 After you've logged in, the **AuthenticationController** will write information about the authentication token to the log window.
 
-![A screenshot of the token information returned from Office 365. The information includes the token, the expiration date, and information about the user, including the email address, family name, and given name.](images\O365APIs_RunningApp3.png)
+![A screenshot of the token information returned from Office 365. The information includes the token, the expiration date, and information about the user, including the email address, family name, and given name.](images/O365APIs_RunningApp3.png)
 
 Click the **DISCOVER SERVICES** button to get a list of the REST service endpoints that are available from your Office 365 server.
 
-![A screenshot of the Office 365 REST service list. The list includes the service name, service ID, capability, entity key, provider name, provider ID, service API version, service endpoint URI, service resource ID and service account type.](images\O365APIs_RunningApp4.png)
+![A screenshot of the Office 365 REST service list. The list includes the service name, service ID, capability, entity key, provider name, provider ID, service API version, service endpoint URI, service resource ID and service account type.](images/O365APIs_RunningApp4.png)
 
 Click the **Get mail** button to get a list of email messages in the user's Inbox. This example only lists the subject of each email message.
 
-![A screenshot of a list of email subject lines from the user's Inbox.](images\O365APIs_RunningApp5.png)
+![A screenshot of a list of email subject lines from the user's Inbox.](images/O365APIs_RunningApp5.png)
