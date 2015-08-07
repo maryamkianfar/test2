@@ -93,8 +93,8 @@ An access token is required to access Office 365 APIs, so your application needs
 4. Click **Create** to create the class and header files.
 
 ####To code the AuthenticationManager header file
+1. Import the necessary Office 365 iOS SDK and ADAL SDK header files by adding the following code directives to AuthenticationManager.h.
 
-1. Import the necessary Office 365 iOS SDK and ADAL SDK header files by adding the following code directives to AuthenticationManager.h.
 	```objective-c
 	#import <Foundation/Foundation.h>
 	#import <ADALiOS/ADAuthenticationContext.h>
@@ -103,16 +103,19 @@ An access token is required to access Office 365 APIs, so your application needs
 	#import <ADALiOS/ADInstanceDiscovery.h>
 	#import <office365_odata_base/office365_odata_base.h>
 	```
+	
 2. Declare a property for the **ADALDependencyResolver** object from the ADAL SDK which uses dependency injection to provide access to the authentication objects.
 
 	```objective-c
 	@property (readonly, nonatomic) ADALDependencyResolver *dependencyResolver;
 	```
+	
 3. Specify the **AuthenticationManager** class as a singleton.
 
 	```objective-c
 	+(AuthenticationManager *)sharedInstance;
 	```
+	
 4. Declare the methods for retrieving and clearing the access and refresh tokens.
 
 	```objective-c
