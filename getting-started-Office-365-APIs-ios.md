@@ -317,13 +317,11 @@ Next you need to add class to your project to connect to Office 365, and use the
 	```
 
 ###The View Controller
-Next you  need to call the methods to connect to the Office 365 services, triggering authentication, and then display the results in the UI. Here you're going to create a View Controller class containing UI controls using the same names as the View Controller and UI controls in the Office 365 iOS Connect sample. This enables you to download and use the storyboard from the Connect sample, allowing you to skip the steps normally required to connect the storyboard to a View Controller.
+Next you need to call the methods to connect to the Office 365 services, triggering authentication, and then display the results in the UI. Here you're going to create a View Controller class containing UI controls using the same names as the View Controller and UI controls in the Office 365 iOS Connect sample. This enables you to download and use the storyboard from the Connect sample, allowing you to skip the steps normally required to connect the storyboard to a View Controller.
 
 ####To add the View Controller
-1. Right-click the SimpleMailApp project, , select **New File**, and in the **iOS** section, click **Cocoa Touch Class**, and then click **Next**.
-
-2. Select **UIViewController** for **Subclass of:**, and specify **SendMailViewController** as the **Class** and then click **Next**.
-
+1. Right-click the SimpleMailApp project, select **New File**, and in the **iOS** section, click **Cocoa Touch Class**, and then click **Next**.
+2. Select **UIViewController** for **Subclass of:**, and specify **SendMailViewController** as the **Class** and then click **Next**.
 3. Click **Create** to create the class and header files. 
 
 ####To code the View Controller
