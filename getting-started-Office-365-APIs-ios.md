@@ -128,104 +128,105 @@ An access token is required to access Office 365 APIs, so your application needs
 ####To code the AuthenticationManager class
 1. Above the **@implementation** declaration, declare static variables for the redirect URI, client ID and the authority.
 
-```objective-c
-static NSString * const REDIRECT_URL_STRING = @"redirectUri";
-static NSString * const CLIENT_ID           = @"clientID";
-static NSString * const AUTHORITY           = @"https://login.microsoftonline.com/common";
-```
+	```objective-c
+	static NSString * const REDIRECT_URL_STRING = @"redirectUri";
+	static NSString * const CLIENT_ID           = @"clientID";
+	static NSString * const AUTHORITY           = @"https://login.microsoftonline.com/common";
+	```
 
     Replace the *redirectUri* with the value you copied from step 8 when registering your app with Azure AD, and the *clientID* with the value you specified in step 13 of the same procedure.
 
 2. In the ***interface** declaration, above **@implementation**, declare the following properties.
 
-```objective-c
-@interface AuthenticationManager ()
-@property (strong,    nonatomic) ADAuthenticationContext *authContext;
-@property (readwrite, nonatomic) ADALDependencyResolver  *dependencyResolver;
-@property (readonly, nonatomic) NSURL    *redirectURL;
-@property (readonly, nonatomic) NSString *authority;
-@property (readonly, nonatomic) NSString *clientId;
-@end
-```
+	```objective-c
+	@interface AuthenticationManager ()
+	@property (strong,    nonatomic) ADAuthenticationContext *authContext;
+	@property (readwrite, nonatomic) ADALDependencyResolver  *dependencyResolver;
+	@property (readonly, nonatomic) NSURL    *redirectURL;
+	@property (readonly, nonatomic) NSString *authority;
+	@property (readonly, nonatomic) NSString *clientId;
+	@end
+	```
 3. Add code for the constructor to the implementation. 
 
-```objective-c
--(instancetype)init
-{
-    self = [super init];
-    if (self) {
-        // These are settings that you need to set based on your
-        // client registration in Azure AD.
-        _redirectURL = [NSURL URLWithString:REDIRECT_URL_STRING];
-        _authority = AUTHORITY;
-        _clientId = CLIENT_ID;
-    }
-    return self;
-}
-```
+	```objective-c
+	-(instancetype)init
+	{
+	    self = [super init];
+	    if (self) {
+	        // These are settings that you need to set based on your
+	        // client registration in Azure AD.
+	        _redirectURL = [NSURL URLWithString:REDIRECT_URL_STRING];
+	        _authority = AUTHORITY;
+	        _clientId = CLIENT_ID;
+	    }
+	    return self;
+	}
+	```
 
 4. Add the following code to use a single authentication manager for the application.
 
-```objective-c
-+(AuthenticationManager *)sharedInstance
-{
-    static AuthenticationManager *sharedInstance;
-    static dispatch_once_t onceToken;
- 
-    // Initialize the AuthenticationManager only once.
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[AuthenticationManager alloc] init];
-    });
- 
-    return sharedInstance;
-}
-```
+	```objective-c
+	+(AuthenticationManager *)sharedInstance
+	{
+	    static AuthenticationManager *sharedInstance;
+	    static dispatch_once_t onceToken;
+	 
+	    // Initialize the AuthenticationManager only once.
+	    dispatch_once(&onceToken, ^{
+	        sharedInstance = [[AuthenticationManager alloc] init];
+	    });
+	 
+	    return sharedInstance;
+	}
+	```
+
 5. Acquire access and refresh tokens from Azure AD for the user.
 
-```objective-c
--(void)acquireAuthTokenWithResourceId:(NSString *)resourceId completionHandler:(void (^)(BOOL authenticated))completionBlock
-{
-        ADAuthenticationError *error;
-    self.authContext = [ADAuthenticationContext authenticationContextWithAuthority:self.authority error:&error];
-[self.authContext acquireTokenWithResource:resourceId
-                                      clientId:self.clientId
-                                   redirectUri:self.redirectURL
-                               completionBlock:^(ADAuthenticationResult *result) {
-                                   if (AD_SUCCEEDED != result.status) {
-                                       completionBlock(NO);
-                                   }
-                                   else {
-                                       NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-                                       [userDefaults setObject:result.tokenCacheStoreItem.userInformation.userId
-                                                        forKey:@"LogInUser"];
-                                       [userDefaults synchronize];
-                                       self.dependencyResolver = [[ADALDependencyResolver alloc] initWithContext:self.authContext
-                                                                                                      resourceId:resourceId
-                                                                                                        clientId:self.clientId
-                                                                                                     redirectUri:self.redirectURL];
-                                       completionBlock(YES);
-                                   }
-                               }];
-}
-```
+	```objective-c
+	-(void)acquireAuthTokenWithResourceId:(NSString *)resourceId completionHandler:(void (^)(BOOL authenticated))completionBlock
+	{
+	        ADAuthenticationError *error;
+	    self.authContext = [ADAuthenticationContext authenticationContextWithAuthority:self.authority error:&error];
+	[self.authContext acquireTokenWithResource:resourceId
+	                                      clientId:self.clientId
+	                                   redirectUri:self.redirectURL
+	                               completionBlock:^(ADAuthenticationResult *result) {
+	                                   if (AD_SUCCEEDED != result.status) {
+	                                       completionBlock(NO);
+	                                   }
+	                                   else {
+	                                       NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	                                       [userDefaults setObject:result.tokenCacheStoreItem.userInformation.userId
+	                                                        forKey:@"LogInUser"];
+	                                       [userDefaults synchronize];
+	                                       self.dependencyResolver = [[ADALDependencyResolver alloc] initWithContext:self.authContext
+	                                                                                                      resourceId:resourceId
+	                                                                                                        clientId:self.clientId
+	                                                                                                     redirectUri:self.redirectURL];
+	                                       completionBlock(YES);
+	                                   }
+	                               }];
+	}
+	```
 
     The first time the application runs, a request is sent to the URL specified for the AUTHORITY const (see step 1), which the redirects you to a login page where you can enter your credentials. If your login is successful, the response contains the access and refresh tokens. Subsequent times when the application runs, the authentication manager will use the access or refresh token for authenticating client requests, unless the token cache is cleared.
 
 6. Finally, add code to log out the user by clearing the token cache and removing the application's cookies.
 
-```objective-c
--(void)clearCredentials{
-    id<ADTokenCacheStoring> cache = [ADAuthenticationSettings sharedInstance].defaultTokenCacheStore;
-    ADAuthenticationError *error;
- 
-       if ([[cache allItemsWithError:&error] count] > 0)
-        [cache removeAllWithError:&error];
-        NSHTTPCookieStorage *cookieStore = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    for (NSHTTPCookie *cookie in cookieStore.cookies) {
-        [cookieStore deleteCookie:cookie];
-    }
-}
-```
+	```objective-c
+	-(void)clearCredentials{
+	    id<ADTokenCacheStoring> cache = [ADAuthenticationSettings sharedInstance].defaultTokenCacheStore;
+	    ADAuthenticationError *error;
+	 
+	       if ([[cache allItemsWithError:&error] count] > 0)
+	        [cache removeAllWithError:&error];
+	        NSHTTPCookieStorage *cookieStore = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+	    for (NSHTTPCookie *cookie in cookieStore.cookies) {
+	        [cookieStore deleteCookie:cookie];
+	    }
+	}
+	```
 
 ###Connect to Office 365
 Next you need to add class to your project to connect to Office 365, and use the Discovery service to retrieve the Exchange service endpoints.
