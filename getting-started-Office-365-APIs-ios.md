@@ -37,29 +37,29 @@ The Cocoapods commands need to be run from the root of your project folder, so f
 ###Enable Cocoapods for the SimpleMailApp project
 1.	Run the following command to initialize the Podfile for your project.
 
-	```objective-c
+	```ShellSession
 	pod init
 	```
 
 2.	Open the Podfile using the following command.
 
-	```objective-c
+	```ShellSession
 	Open podfile
 	```
 
 3.	Declare the dependencies for the Office 365 SDK for iOS and the ADAL SDK for iOS by adding the following definitions to the open Podfile.
 
-	```objective-c
+	```ShellSession
 	pod 'ADALiOS', '~> 1.2.0'
 	pod 'Office365', '= 0.9.0'
 	```
 
 	These definitions should between the target and end statements, so the result will look like the following.
 
-	```objective-c
+	```ShellSession
 	target 'SimpleMailApp' do
 	pod 'ADALiOS', '~> 1.2.0'
-    	pod 'Office365', '= 0.9.0'
+	pod 'Office365', '= 0.9.0'
 	end
 	```
      
@@ -70,7 +70,7 @@ The Cocoapods commands need to be run from the root of your project folder, so f
 ###Configure the dependencies for the SimpleMailApp project
 To configure these dependencies and add them and the existing project to a new workspace, from Terminal, run the following command.
 
-```objective-c
+```ShellSession
     pod install
 ```
 
