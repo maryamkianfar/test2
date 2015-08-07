@@ -237,7 +237,7 @@ Next you need to add class to your project to connect to Office 365, and use the
 3. Click **Create** to create the class and header files.
 
 ####To code the Office365ClientFetcher header file
-1. Import the necessary Office 365 iOS SDK header files by adding the following code directives to Office365ClientFetcher.h.
+1. Import the necessary Office 365 iOS SDK header files by adding the following code directives to Office365ClientFetcher.h.
 
 	```objective-c
 	#import <Foundation/Foundation.h>
