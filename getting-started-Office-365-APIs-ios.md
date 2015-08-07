@@ -89,47 +89,41 @@ An access token is required to access Office 365 APIs, so your application needs
 
 ####To create the AuthenticationManager class
 1. Right-click the SimpleMailApp project folder, select **New File**, and in the **iOS** section, click **Cocoa Touch Class**, and then click **Next**.
-
 2. Specify **AuthenticationManager** as the **Class**, **NSObject** for **Subclass of:**, and then click **Next**.
-
 3. Click **Create** to create the class and header files.
 
 ####To code the AuthenticationManager header file
 
 1. Import the necessary Office 365 iOS SDK and ADAL SDK header files by adding the following code directives to AuthenticationManager.h.
 
-```objective-c
-#import <Foundation/Foundation.h>
-#import <ADALiOS/ADAuthenticationContext.h>
-#import <ADALiOS/ADAuthenticationSettings.h>
-#import <ADALiOS/ADLogger.h>
-#import <ADALiOS/ADInstanceDiscovery.h>
-#import <office365_odata_base/office365_odata_base.h>
-```
-
+	```objective-c
+	#import <Foundation/Foundation.h>
+	#import <ADALiOS/ADAuthenticationContext.h>
+	#import <ADALiOS/ADAuthenticationSettings.h>
+	#import <ADALiOS/ADLogger.h>
+	#import <ADALiOS/ADInstanceDiscovery.h>
+	#import <office365_odata_base/office365_odata_base.h>
+	```
 2. Declare a property for the **ADALDependencyResolver** object from the ADAL SDK which uses dependency injection to provide access to the authentication objects.
 
-```objective-c
-@property (readonly, nonatomic) ADALDependencyResolver *dependencyResolver;
-```
+	```objective-c
+	@property (readonly, nonatomic) ADALDependencyResolver *dependencyResolver;
+	```
+3. Specify the **AuthenticationManager** class as a singleton.
 
-7. Specify the **AuthenticationManager** class as a singleton.
+	```objective-c
+	+(AuthenticationManager *)sharedInstance;
+	```
+4. Declare the methods for retrieving and clearing the access and refresh tokens.
 
-```objective-c
-+(AuthenticationManager *)sharedInstance;
-```
-
-8. Declare the methods for retrieving and clearing the access and refresh tokens.
-
-```objective-c
-//retrieve token
--(void)acquireAuthTokenWithResourceId:(NSString *)resourceId completionHandler:(void (^)(BOOL authenticated))completionBlock;
-//clear token
--(void)clearCredentials;
-```
+	```objective-c
+	//retrieve token
+	-(void)acquireAuthTokenWithResourceId:(NSString *)resourceId completionHandler:(void (^)(BOOL authenticated))completionBlock;
+	//clear token
+	-(void)clearCredentials;
+	```
 
 ####To code the AuthenticationManager class
-
 1. Above the **@implementation** declaration, declare static variables for the redirect URI, client ID and the authority.
 
 ```objective-c
