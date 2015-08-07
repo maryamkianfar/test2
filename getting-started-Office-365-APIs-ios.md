@@ -232,92 +232,89 @@ An access token is required to access Office 365 APIs, so your application needs
 Next you need to add class to your project to connect to Office 365, and use the Discovery service to retrieve the Exchange service endpoints.
 
 ####To create the Office365ClientFetcher class and header files
-1. Right-click the SimpleMailApp project folder, , select **New File**, and in the **iOS** section, click **Cocoa Touch Class**, and then click **Next**.
-
+2. Right-click the SimpleMailApp project folder, , select **New File**, and in the **iOS** section, click **Cocoa Touch Class**, and then click **Next**.
 2. Specify **Office365ClientFetcher** as the **Class**, **NSObject** for **Subclass of:**, and then click **Next**.
-
 3. Click **Create** to create the class and header files.
 
 ####To code the Office365ClientFetcher header file
 1. Import the necessary Office 365 iOS SDK header files by adding the following code directives to Office365ClientFetcher.h.
 
-```objective-c
-#import <Foundation/Foundation.h>
-#import <office365_odata_base/office365_odata_base.h>
-#import <office365_exchange_sdk/office365_exchange_sdk.h>
-#import "MSDiscoveryClient.h"
-#import <MSOutlookServicesClient.h>
-```
+	```objective-c
+	#import <Foundation/Foundation.h>
+	#import <office365_odata_base/office365_odata_base.h>
+	#import <office365_exchange_sdk/office365_exchange_sdk.h>
+	#import "MSDiscoveryClient.h"
+	#import <MSOutlookServicesClient.h>
+	```
 
 2. Declare the methods for fetching the Outlook and Discovery service clients.
 
-```objective-c
--(void)fetchOutlookClient:(void (^)(MSOutlookServicesClient *outlookClient))callback;
--(void)fetchDiscoveryClient:(void (^)(MSDiscoveryClient *discoveryClient))callback;
-```
+	```objective-c
+	-(void)fetchOutlookClient:(void (^)(MSOutlookServicesClient *outlookClient))callback;
+	-(void)fetchDiscoveryClient:(void (^)(MSDiscoveryClient *discoveryClient))callback;
+	```
 
 ####To code the Office365ClientFetcher class
-
 1. Import the Office365ClientFetcher and AuthenticationManager header files.
 
-```objective-c
-#import "Office365ClientFetcher.h"
-#import "AuthenticationManager.h"
-```
+	```objective-c
+	#import "Office365ClientFetcher.h"
+	#import "AuthenticationManager.h"
+	```
 
-5. Add the implementation code to the Office365ClientFetcher class.
+2. Add the implementation code to the Office365ClientFetcher class.
 
-```objective-c
--(void)fetchOutlookClient:(void (^)(MSOutlookServicesClient *outlookClient))callback
-{
-    // Get an instance of the authentication controller.
-    AuthenticationManager *authenticationManager = [AuthenticationManager sharedInstance];
-    [authenticationManager acquireAuthTokenWithResourceId:@"https://outlook.office365.com/"
-                                           completionHandler:^(BOOL authenticated) {
-        if(authenticated){
-            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-            NSDictionary *serviceEndpoints = [userDefaults objectForKey:@"O365ServiceEndpoints"];
-            // Gets the MSOutlookServicesClient with the URL for the Mail service.
-            callback([[MSOutlookServicesClient alloc] initWithUrl:serviceEndpoints[@"Mail"]
-                                       dependencyResolver:authenticationManager.dependencyResolver]);
-        }
-        else{
-            //Display an alert in case of an error
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"Error in the authentication");
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:@"Authentication failed. Check the log for errors."
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            });
-        }
-    }];
-}
--(void)fetchDiscoveryClient:(void (^)(MSDiscoveryClient *discoveryClient))callback
-{
-    AuthenticationManager *authenticationManager = [AuthenticationManager sharedInstance];
-    [authenticationManager acquireAuthTokenWithResourceId:@"https://api.office.com/discovery/"
-                                        completionHandler:^(BOOL authenticated) {
-        if (authenticated) {
-            callback([[MSDiscoveryClient alloc] initWithUrl:@"https://api.office.com/discovery/v1.0/me/"
-                                         dependencyResolver:authenticationManager.dependencyResolver]);
-        }
-        else {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"Error in the authentication");
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                message:@"Authentication failed. This may be because the Internet connection is offline  or perhaps the credentials are incorrect. Check the log for errors and try again."
-                                                               delegate:self
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil];
-                [alert show];
-            });
-        }
-    }];
-}
-```
+	```objective-c
+	-(void)fetchOutlookClient:(void (^)(MSOutlookServicesClient *outlookClient))callback
+	{
+	    // Get an instance of the authentication controller.
+	    AuthenticationManager *authenticationManager = [AuthenticationManager sharedInstance];
+	    [authenticationManager acquireAuthTokenWithResourceId:@"https://outlook.office365.com/"
+	                                           completionHandler:^(BOOL authenticated) {
+	        if(authenticated){
+	            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+	            NSDictionary *serviceEndpoints = [userDefaults objectForKey:@"O365ServiceEndpoints"];
+	            // Gets the MSOutlookServicesClient with the URL for the Mail service.
+	            callback([[MSOutlookServicesClient alloc] initWithUrl:serviceEndpoints[@"Mail"]
+	                                       dependencyResolver:authenticationManager.dependencyResolver]);
+	        }
+	        else{
+	            //Display an alert in case of an error
+	            dispatch_async(dispatch_get_main_queue(), ^{
+	                NSLog(@"Error in the authentication");
+	                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+	                                                                message:@"Authentication failed. Check the log for errors."
+	                                                               delegate:self
+	                                                      cancelButtonTitle:@"OK"
+	                                                      otherButtonTitles:nil];
+	                [alert show];
+	            });
+	        }
+	    }];
+	}
+	-(void)fetchDiscoveryClient:(void (^)(MSDiscoveryClient *discoveryClient))callback
+	{
+	    AuthenticationManager *authenticationManager = [AuthenticationManager sharedInstance];
+	    [authenticationManager acquireAuthTokenWithResourceId:@"https://api.office.com/discovery/"
+	                                        completionHandler:^(BOOL authenticated) {
+	        if (authenticated) {
+	            callback([[MSDiscoveryClient alloc] initWithUrl:@"https://api.office.com/discovery/v1.0/me/"
+	                                         dependencyResolver:authenticationManager.dependencyResolver]);
+	        }
+	        else {
+	            dispatch_async(dispatch_get_main_queue(), ^{
+	                NSLog(@"Error in the authentication");
+	                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+	                                                                message:@"Authentication failed. This may be because the Internet connection is offline  or perhaps the credentials are incorrect. Check the log for errors and try again."
+	                                                               delegate:self
+	                                                      cancelButtonTitle:@"OK"
+	                                                      otherButtonTitles:nil];
+	                [alert show];
+	            });
+	        }
+	    }];
+	}
+	```
 
 ###The View Controller
 Next you  need to call the methods to connect to the Office 365 services, triggering authentication, and then display the results in the UI. Here you're going to create a View Controller class containing UI controls using the same names as the View Controller and UI controls in the Office 365 iOS Connect sample. This enables you to download and use the storyboard from the Connect sample, allowing you to skip the steps normally required to connect the storyboard to a View Controller.
