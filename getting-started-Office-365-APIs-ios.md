@@ -232,8 +232,8 @@ An access token is required to access Office 365 APIs, so your application needs
 Next you need to add class to your project to connect to Office 365, and use the Discovery service to retrieve the Exchange service endpoints.
 
 ####To create the Office365ClientFetcher class and header files
-2. Right-click the SimpleMailApp project folder, , select **New File**, and in the **iOS** section, click **Cocoa Touch Class**, and then click **Next**.
-2. Specify **Office365ClientFetcher** as the **Class**, **NSObject** for **Subclass of:**, and then click **Next**.
+1. Right-click the SimpleMailApp project folder, , select **New File**, and in the **iOS** section, click **Cocoa Touch Class**, and then click **Next**.
+2. Specify **Office365ClientFetcher** as the **Class**, **NSObject** for **Subclass of:**, and then click **Next**.
 3. Click **Create** to create the class and header files.
 
 ####To code the Office365ClientFetcher header file
