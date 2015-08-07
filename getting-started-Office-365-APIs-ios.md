@@ -38,29 +38,29 @@ The Cocoapods commands need to be run from the root of your project folder, so f
 1.	Run the following command to initialize the Podfile for your project.
 
 	```objective-c
-		pod init
+	pod init
 	```
 
 2.	Open the Podfile using the following command.
 
 	```objective-c
-		Open podfile
+	Open podfile
 	```
 
 3.	Declare the dependencies for the Office 365 SDK for iOS and the ADAL SDK for iOS by adding the following definitions to the open Podfile.
 
 	```objective-c
-		pod 'ADALiOS', '~> 1.2.0'
-		pod 'Office365', '= 0.9.0'
+	pod 'ADALiOS', '~> 1.2.0'
+	pod 'Office365', '= 0.9.0'
 	```
 
 	These definitions should between the target and end statements, so the result will look like the following.
 
 	```objective-c
-		target 'SimpleMailApp' do
-	    pod 'ADALiOS', '~> 1.2.0'
+	target 'SimpleMailApp' do
+	pod 'ADALiOS', '~> 1.2.0'
     	pod 'Office365', '= 0.9.0'
-	    end
+	end
 	```
      
 4.	Close the Podfile.
@@ -70,7 +70,9 @@ The Cocoapods commands need to be run from the root of your project folder, so f
 ###Configure the dependencies for the SimpleMailApp project
 To configure these dependencies and add them and the existing project to a new workspace, from Terminal, run the following command.
 
+```objective-c
     pod install
+```
 
 ###Register your application with Azure Active Directory
 
@@ -105,21 +107,21 @@ An access token is required to access Office 365 APIs, so your application needs
 #import <office365_odata_base/office365_odata_base.h>
 ```
 
-6. Declare a property for the **ADALDependencyResolver** object from the ADAL SDK which uses dependency injection to provide access to the authentication objects.
+2. Declare a property for the **ADALDependencyResolver** object from the ADAL SDK which uses dependency injection to provide access to the authentication objects.
 
-    ```objective-c
+```objective-c
 @property (readonly, nonatomic) ADALDependencyResolver *dependencyResolver;
 ```
 
 7. Specify the **AuthenticationManager** class as a singleton.
 
-    ```objective-c
+```objective-c
 +(AuthenticationManager *)sharedInstance;
 ```
 
 8. Declare the methods for retrieving and clearing the access and refresh tokens.
 
-    ```objective-c
+```objective-c
 //retrieve token
 -(void)acquireAuthTokenWithResourceId:(NSString *)resourceId completionHandler:(void (^)(BOOL authenticated))completionBlock;
 //clear token
@@ -130,7 +132,7 @@ An access token is required to access Office 365 APIs, so your application needs
 
 1. Above the **@implementation** declaration, declare static variables for the redirect URI, client ID and the authority.
 
-    ```objective-c
+```objective-c
 static NSString * const REDIRECT_URL_STRING = @"redirectUri";
 static NSString * const CLIENT_ID           = @"clientID";
 static NSString * const AUTHORITY           = @"https://login.microsoftonline.com/common";
@@ -140,7 +142,7 @@ static NSString * const AUTHORITY           = @"https://login.microsof
 
 2. In the ***interface** declaration, above **@implementation**, declare the following properties.
 
-    ```objective-c
+```objective-c
 @interface AuthenticationManager ()
 @property (strong,    nonatomic) ADAuthenticationContext *authContext;
 @property (readwrite, nonatomic) ADALDependencyResolver  *dependencyResolver;
@@ -151,7 +153,7 @@ static NSString * const AUTHORITY           = @"https://login.microsof
 ```
 3. Add code for the constructor to the implementation. 
 
-	```objective-c
+```objective-c
 -(instancetype)init
 {
     self = [super init];
@@ -168,7 +170,7 @@ static NSString * const AUTHORITY           = @"https://login.microsof
 
 4. Add the following code to use a single authentication manager for the application.
 
-	```objective-c
+```objective-c
 +(AuthenticationManager *)sharedInstance
 {
     static AuthenticationManager *sharedInstance;
@@ -184,7 +186,7 @@ static NSString * const AUTHORITY           = @"https://login.microsof
 ```
 5. Acquire access and refresh tokens from Azure AD for the user.
 
-    ```objective-c
+```objective-c
 -(void)acquireAuthTokenWithResourceId:(NSString *)resourceId completionHandler:(void (^)(BOOL authenticated))completionBlock
 {
         ADAuthenticationError *error;
@@ -215,7 +217,7 @@ static NSString * const AUTHORITY           = @"https://login.microsof
 
 6. Finally, add code to log out the user by clearing the token cache and removing the application's cookies.
 
-    ```objective-c
+```objective-c
 -(void)clearCredentials{
     id<ADTokenCacheStoring> cache = [ADAuthenticationSettings sharedInstance].defaultTokenCacheStore;
     ADAuthenticationError *error;
@@ -242,7 +244,7 @@ Next you need to add class to your project to connect to Office 365, and use the
 ####To code the Office365ClientFetcher header file
 1. Import the necessary Office 365 iOS SDK header files by adding the following code directives to Office365ClientFetcher.h.
 
-    ```objective-c
+```objective-c
 #import <Foundation/Foundation.h>
 #import <office365_odata_base/office365_odata_base.h>
 #import <office365_exchange_sdk/office365_exchange_sdk.h>
@@ -252,7 +254,7 @@ Next you need to add class to your project to connect to Office 365, and use the
 
 2. Declare the methods for fetching the Outlook and Discovery service clients.
 
-    ```objective-c
+```objective-c
 -(void)fetchOutlookClient:(void (^)(MSOutlookServicesClient *outlookClient))callback;
 -(void)fetchDiscoveryClient:(void (^)(MSDiscoveryClient *discoveryClient))callback;
 ```
@@ -261,14 +263,14 @@ Next you need to add class to your project to connect to Office 365, and use the
 
 1. Import the Office365ClientFetcher and AuthenticationManager header files.
 
-	```objective-c
+```objective-c
 #import "Office365ClientFetcher.h"
 #import "AuthenticationManager.h"
 ```
 
 5. Add the implementation code to the Office365ClientFetcher class.
 
-	```objective-c
+```objective-c
 -(void)fetchOutlookClient:(void (^)(MSOutlookServicesClient *outlookClient))callback
 {
     // Get an instance of the authentication controller.
