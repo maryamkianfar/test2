@@ -88,14 +88,13 @@ Open the **SimpleMailApp** workspace in Xcode.
 An access token is required to access Office 365 APIs, so your application needs to implement the logic to retrieve and manage access tokens. The [Azure Active Directory authentication library (ADAL) for iOS and OSX](https://github.com/AzureAD/azure-activedirectory-library-for-objc) provides you with the ability to manage authentication in your application with just a few lines of code. The first thing you'll do is create a header file and class, AuthenticationManager that uses the ADAL for iOS and OSX to manage authentication for your app.
 
 ####To create the AuthenticationManager class
-1. Right-click the SimpleMailApp project folder, select **New File**, and in the **iOS** section, click **Cocoa Touch Class**, and then click **Next**.
-2. Specify **AuthenticationManager** as the **Class**, **NSObject** for **Subclass of:**, and then click **Next**.
-3. Click **Create** to create the class and header files.
+2. Right-click the SimpleMailApp project folder, select **New File**, and in the **iOS** section, click **Cocoa Touch Class**, and then click **Next**.
+3. Specify **AuthenticationManager** as the **Class**, **NSObject** for **Subclass of:**, and then click **Next**.
+4. Click **Create** to create the class and header files.
 
 ####To code the AuthenticationManager header file
 
 1. Import the necessary Office 365 iOS SDK and ADAL SDK header files by adding the following code directives to AuthenticationManager.h.
-
 	```objective-c
 	#import <Foundation/Foundation.h>
 	#import <ADALiOS/ADAuthenticationContext.h>
