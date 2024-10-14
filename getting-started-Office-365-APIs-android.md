@@ -5,7 +5,8 @@ Let's create a simple application that gets information from an Exchange Online 
 ![A screenshot of the app running in an emulator window. The available actions are shown on buttons.](images/O365APIs_RunningApp1-50Percent.png)
 
 ##Create your app and add dependencies
-In this step, you'll create an app and add the Office 365 SDK for Android and Azure Active Directory Authentication Library for Android to the project. Source for both of these libraries is available from GitHub, and you can download the binaries for the Office 365 SDK from [Bintray](https://bintray.com/msopentech/Maven/Office-365-SDK-for-Android/view "Bintray"), if you prefer.
+In this step, you'll create an app and add the Office 365 SDK for Android and Azure Active Directory Authentication Library for Android to the project. Source for both of these libraries is available from GitHub, and you can download the binaries for the Office 365 SDK from [Bintray]
+(https://bintray.com/msopentech/Maven/Office-365-SDK-for-Android/view "Bintray"), if you prefer.
 
 ###Add dependencies for Android Studio
 
